@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -9,6 +9,7 @@ import {
   FlatList,
   SafeAreaView,
   Dimensions,
+  Alert,
 } from 'react-native';
 import { router } from 'expo-router';
 import { Colors } from '@/constants/Colors';
@@ -16,11 +17,16 @@ import { useColorScheme } from '@/hooks/useColorScheme';
 import { IconSymbol } from '@/components/ui/IconSymbol';
 import { RestaurantCard } from '@/components/RestaurantCard';
 import { FoodItemCard } from '@/components/FoodItemCard';
+import { LocationPicker } from '@/components/LocationPicker';
+import { PromotionalBanner } from '@/components/PromotionalBanner';
+import { QuickReorder } from '@/components/QuickReorder';
 import {
   categories,
   restaurants,
   popularItems,
   promotedRestaurants,
+  sampleOrders,
+  SimpleOrder,
 } from '@/constants/DummyData';
 import { useAppContext } from '@/contexts/AppContext';
 
@@ -28,6 +34,52 @@ export default function HomeScreen() {
   const colorScheme = useColorScheme();
   const colors = Colors[colorScheme ?? 'light'];
   const { state } = useAppContext();
+  const [currentLocation, setCurrentLocation] = useState(state.currentUser.address);
+  const [greeting, setGreeting] = useState('Good evening');
+
+  useEffect(() => {
+    const hour = new Date().getHours();
+    if (hour < 12) {
+      setGreeting('Good morning');
+    } else if (hour < 17) {
+      setGreeting('Good afternoon');
+    } else {
+      setGreeting('Good evening');
+    }
+  }, []);
+
+  const handleLocationChange = (location: string, coordinates?: { latitude: number; longitude: number }) => {
+    setCurrentLocation(location);
+    // Here you would typically update the user's location in the context/database
+  };
+
+  const handleOfferPress = (offer: any) => {
+    Alert.alert(
+      offer.title,
+      `${offer.subtitle}\nValid until: ${new Date(offer.validUntil).toLocaleDateString()}`,
+      [
+        { text: 'Cancel', style: 'cancel' },
+        { text: offer.buttonText, onPress: () => router.push('/search' as any) },
+      ]
+    );
+  };
+
+  const handleReorder = (order: SimpleOrder) => {
+    Alert.alert(
+      'Reorder',
+      `Would you like to reorder from ${order.restaurant.name}?`,
+      [
+        { text: 'Cancel', style: 'cancel' },
+        { 
+          text: 'Reorder', 
+          onPress: () => {
+            // Add items to cart and navigate to restaurant
+            router.push(`/restaurant/${order.restaurant.id}` as any);
+          }
+        },
+      ]
+    );
+  };
 
   const renderCategoryItem = ({ item }: { item: any }) => (
     <TouchableOpacity
@@ -47,13 +99,32 @@ export default function HomeScreen() {
     </View>
   );
 
+  // Get trending restaurants based on ratings and recent orders
+  const trendingRestaurants = restaurants
+    .filter(r => r.rating >= 4.5)
+    .sort((a, b) => b.rating - a.rating)
+    .slice(0, 3);
+
+  // Weather-based suggestions (mock implementation)
+  const getWeatherBasedSuggestions = () => {
+    const hour = new Date().getHours();
+    if (hour < 10) {
+      return categories.filter(c => c.name === 'Beverages');
+    } else if (hour > 18) {
+      return categories.filter(c => ['Pizza', 'Indian', 'Chinese'].includes(c.name));
+    }
+    return categories.slice(0, 3);
+  };
+
+  const weatherSuggestions = getWeatherBasedSuggestions();
+
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* Header */}
         <View style={styles.header}>
           <View>
-            <Text style={[styles.greeting, { color: colors.icon }]}>Good evening</Text>
+            <Text style={[styles.greeting, { color: colors.icon }]}>{greeting}</Text>
             <Text style={[styles.userName, { color: colors.text }]}>
               {state.currentUser.name}
             </Text>
@@ -66,14 +137,11 @@ export default function HomeScreen() {
           </TouchableOpacity>
         </View>
 
-        {/* Location */}
-        <TouchableOpacity style={styles.locationContainer}>
-          <IconSymbol name="location.fill" size={16} color={colors.primary} />
-          <Text style={[styles.locationText, { color: colors.text }]}>
-            {state.currentUser.address}
-          </Text>
-          <IconSymbol name="chevron.down" size={16} color={colors.icon} />
-        </TouchableOpacity>
+        {/* Location Picker */}
+        <LocationPicker
+          currentLocation={currentLocation}
+          onLocationChange={handleLocationChange}
+        />
 
         {/* Search Bar */}
         <TouchableOpacity
@@ -85,6 +153,15 @@ export default function HomeScreen() {
             Search for restaurants, food...
           </Text>
         </TouchableOpacity>
+
+        {/* Promotional Banners */}
+        <PromotionalBanner onOfferPress={handleOfferPress} />
+
+        {/* Quick Reorder */}
+        <QuickReorder 
+          recentOrders={sampleOrders.filter(order => order.status === 'delivered')} 
+          onReorder={handleReorder} 
+        />
 
         {/* Categories */}
         <View style={styles.section}>
@@ -99,17 +176,37 @@ export default function HomeScreen() {
           />
         </View>
 
-        {/* Promoted Restaurants */}
+        {/* Weather-based Suggestions */}
+        {weatherSuggestions.length > 0 && (
+          <View style={styles.section}>
+            <View style={styles.sectionHeader}>
+              <Text style={[styles.sectionTitle, { color: colors.text }]}>
+                Perfect for Today
+              </Text>
+              <IconSymbol name="sun.max.fill" size={20} color={colors.warning} />
+            </View>
+            <FlatList
+              data={weatherSuggestions}
+              renderItem={renderCategoryItem}
+              keyExtractor={(item) => item.id}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={styles.categoriesList}
+            />
+          </View>
+        )}
+
+        {/* Trending Restaurants */}
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
             <Text style={[styles.sectionTitle, { color: colors.text }]}>
-              Featured Restaurants
+              Trending Now
             </Text>
             <TouchableOpacity onPress={() => router.push('/search' as any)}>
               <Text style={[styles.seeAll, { color: colors.primary }]}>See all</Text>
             </TouchableOpacity>
           </View>
-          {promotedRestaurants.map((restaurant) => (
+          {trendingRestaurants.map((restaurant) => (
             <RestaurantCard key={restaurant.id} restaurant={restaurant} />
           ))}
         </View>
@@ -134,14 +231,38 @@ export default function HomeScreen() {
           />
         </View>
 
+        {/* Featured Restaurants */}
+        <View style={styles.section}>
+          <View style={styles.sectionHeader}>
+            <Text style={[styles.sectionTitle, { color: colors.text }]}>
+              Featured Restaurants
+            </Text>
+            <TouchableOpacity onPress={() => router.push('/search' as any)}>
+              <Text style={[styles.seeAll, { color: colors.primary }]}>See all</Text>
+            </TouchableOpacity>
+          </View>
+          {promotedRestaurants.map((restaurant) => (
+            <RestaurantCard key={restaurant.id} restaurant={restaurant} />
+          ))}
+        </View>
+
         {/* All Restaurants */}
         <View style={styles.section}>
           <Text style={[styles.sectionTitle, { color: colors.text }]}>
             All Restaurants
           </Text>
-          {restaurants.map((restaurant) => (
+          {restaurants.slice(0, 3).map((restaurant) => (
             <RestaurantCard key={restaurant.id} restaurant={restaurant} />
           ))}
+          <TouchableOpacity
+            style={[styles.viewMoreButton, { backgroundColor: colors.secondary }]}
+            onPress={() => router.push('/search' as any)}
+          >
+            <Text style={[styles.viewMoreText, { color: colors.primary }]}>
+              View More Restaurants
+            </Text>
+            <IconSymbol name="arrow.right" size={16} color={colors.primary} />
+          </TouchableOpacity>
         </View>
 
         {/* Bottom spacing for tab bar */}
@@ -253,6 +374,21 @@ const styles = StyleSheet.create({
   popularItemContainer: {
     width: 280,
     marginRight: 16,
+  },
+  viewMoreButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 16,
+    paddingHorizontal: 20,
+    marginHorizontal: 20,
+    borderRadius: 12,
+    marginTop: 8,
+  },
+  viewMoreText: {
+    fontSize: 16,
+    fontWeight: '600',
+    marginRight: 8,
   },
   bottomSpacing: {
     height: 100,

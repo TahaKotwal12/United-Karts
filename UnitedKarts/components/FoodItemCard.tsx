@@ -1,13 +1,13 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
-import { FoodItem } from '@/constants/DummyData';
+import { SimpleFoodItem } from '@/constants/DummyData';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { IconSymbol } from '@/components/ui/IconSymbol';
 import { useCart } from '@/contexts/AppContext';
 
 interface FoodItemCardProps {
-  item: FoodItem;
+  item: SimpleFoodItem;
   style?: any;
 }
 
@@ -17,7 +17,31 @@ export function FoodItemCard({ item, style }: FoodItemCardProps) {
   const { addToCart } = useCart();
 
   const handleAddToCart = () => {
-    addToCart({ ...item, quantity: 1 });
+    // Convert SimpleFoodItem to CartItem format
+    addToCart({
+      food_item: {
+        core_mstr_united_kart_food_items_id: item.id,
+        restaurant_id: item.restaurantId,
+        category_id: item.category,
+        name: item.name,
+        description: item.description,
+        price: item.price,
+        discount_price: undefined,
+        image: item.image,
+        is_veg: item.isVeg,
+        ingredients: undefined,
+        allergens: undefined,
+        calories: undefined,
+        prep_time: undefined,
+        status: 'available' as const,
+        rating: item.rating,
+        total_ratings: 0,
+        sort_order: 0,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      },
+      quantity: 1,
+    });
   };
 
   return (

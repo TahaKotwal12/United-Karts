@@ -1,14 +1,14 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { router } from 'expo-router';
-import { Restaurant } from '@/constants/DummyData';
+import { SimpleRestaurant } from '@/constants/DummyData';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { IconSymbol } from '@/components/ui/IconSymbol';
 import { useFavorites } from '@/contexts/AppContext';
 
 interface RestaurantCardProps {
-  restaurant: Restaurant;
+  restaurant: SimpleRestaurant;
   style?: any;
 }
 
