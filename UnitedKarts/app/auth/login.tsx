@@ -45,7 +45,7 @@ export default function LoginScreen() {
       if (success) {
         // Navigate based on user role
         if (email.includes('restaurant')) {
-          router.replace('/restaurant-dashboard' as any);
+          router.replace('/restaurant/(tabs)' as any);
         } else if (email.includes('delivery')) {
           router.replace('/delivery-dashboard' as any);
         } else {

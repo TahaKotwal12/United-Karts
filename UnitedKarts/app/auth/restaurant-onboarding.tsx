@@ -89,16 +89,16 @@ export default function RestaurantOnboardingScreen() {
     // Simulate API call to create restaurant
     setTimeout(() => {
       setLoading(false);
-      Alert.alert(
-        'Success!',
-        'Your restaurant has been registered successfully. We will review your application and get back to you within 24 hours.',
-        [
-          {
-            text: 'Continue',
-            onPress: () => router.replace('/restaurant-dashboard' as any),
-          },
-        ]
-      );
+        Alert.alert(
+          'Success!',
+          'Your restaurant has been registered successfully. We will review your application and get back to you within 24 hours.',
+          [
+            {
+              text: 'Continue',
+              onPress: () => router.replace('/restaurant/(tabs)' as any),
+            },
+          ]
+        );
     }, 2000);
   };
 

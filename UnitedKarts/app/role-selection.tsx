@@ -30,7 +30,7 @@ export default function RoleSelectionScreen() {
       title: 'Restaurant Partner',
       subtitle: 'Manage your restaurant and orders',
       icon: 'house.fill',
-      route: '/restaurant-dashboard',
+      route: '/restaurant/(tabs)',
       color: colors.success,
     },
     {

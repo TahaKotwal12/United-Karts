@@ -16,7 +16,7 @@ export default function AppIndex() {
         // User is authenticated, navigate to appropriate dashboard
         switch (user.role) {
           case 'restaurant_owner':
-            router.replace('/restaurant-dashboard');
+            router.replace('/restaurant/(tabs)');
             break;
           case 'delivery_partner':
             router.replace('/delivery-dashboard');
