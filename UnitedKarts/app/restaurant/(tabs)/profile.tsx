@@ -41,6 +41,10 @@ interface RestaurantProfile {
   isOpen: boolean;
   openingTime: string;
   closingTime: string;
+  fssaiLicense: string;
+  gstin: string;
+  bankDetails: { accountNumber: string; ifscCode: string };
+  closingTime: string;
 }
 
 interface PaymentMethod {
@@ -80,6 +84,10 @@ export default function RestaurantProfileScreen() {
     totalRatings: 1247,
     isOpen: true,
     openingTime: '10:00',
+    closingTime: '22:00',
+    fssaiLicense: '12345678901234', // Dummy FSSAI number
+    gstin: '07ABCDE1234F1Z5', // Dummy GSTIN
+    bankDetails: { accountNumber: '9876543210', ifscCode: 'HDFC0001234' }, // Dummy bank details
     closingTime: '22:00',
   });
 
@@ -497,6 +505,66 @@ export default function RestaurantProfileScreen() {
               </View>
             </View>
 
+            {/* Regulatory Information */}
+            <View style={[styles.formSection, { backgroundColor: colors.card }]}>
+              <Text style={[styles.formSectionTitle, { color: colors.text }]}>Regulatory Information</Text>
+
+              <View style={styles.formField}>
+                <Text style={[styles.fieldLabel, { color: colors.text }]}>FSSAI License Number</Text>
+                <TextInput
+                  style={[styles.textInput, { backgroundColor: colors.secondary, color: colors.text }]}
+                  value={editedProfile.fssaiLicense}
+                  onChangeText={(text) => setEditedProfile(prev => ({ ...prev, fssaiLicense: text }))}
+                  keyboardType="default"
+                />
+              </View>
+
+              <View style={styles.formField}>
+                <Text style={[styles.fieldLabel, { color: colors.text }]}>GSTIN</Text>
+                <TextInput
+                  style={[styles.textInput, { backgroundColor: colors.secondary, color: colors.text }]}
+                  value={editedProfile.gstin}
+                  onChangeText={(text) => setEditedProfile(prev => ({ ...prev, gstin: text }))}
+                  keyboardType="default"
+                  autoCapitalize="characters"
+                />
+              </View>
+            </View>
+
+            {/* Bank Details */}
+            <View style={[styles.formSection, { backgroundColor: colors.card }]}>
+              <Text style={[styles.formSectionTitle, { color: colors.text }]}>Bank Details for Payouts</Text>
+
+              <View style={styles.formField}>
+                <Text style={[styles.fieldLabel, { color: colors.text }]}>Bank Account Number</Text>
+                <TextInput
+                  style={[styles.textInput, { backgroundColor: colors.secondary, color: colors.text }]}
+                  value={editedProfile.bankDetails.accountNumber}
+                  onChangeText={(text) => setEditedProfile(prev => ({
+                    ...prev,
+                    bankDetails: { ...prev.bankDetails, accountNumber: text }
+                  }))}
+                  keyboardType="number-pad"
+                />
+              </View>
+
+              <View style={styles.formField}>
+                <Text style={[styles.fieldLabel, { color: colors.text }]}>IFSC Code</Text>
+                <TextInput
+                  style={[styles.textInput, { backgroundColor: colors.secondary, color: colors.text }]}
+                  value={editedProfile.bankDetails.ifscCode}
+                  onChangeText={(text) => setEditedProfile(prev => ({
+                    ...prev,
+                    bankDetails: { ...prev.bankDetails, ifscCode: text }
+                  }))}
+                  keyboardType="default"
+                  autoCapitalize="characters"
+                />
+              </View>
+            </View>
+
+
+            {/* Restaurant Photos Placeholder */}
             {/* Business Settings */}
             <View style={[styles.formSection, { backgroundColor: colors.card }]}>
               <Text style={[styles.formSectionTitle, { color: colors.text }]}>Business Settings</Text>
@@ -551,6 +619,26 @@ export default function RestaurantProfileScreen() {
                   thumbColor={editedProfile.isOpen ? 'white' : colors.icon}
                 />
               </View>
+            </View>
+
+            {/* Restaurant Photos */}
+            <View style={[styles.formSection, { backgroundColor: colors.card }]}>
+              <Text style={[styles.formSectionTitle, { color: colors.text }]}>Restaurant Photos</Text>
+              <Text style={[styles.formSectionSubtitle, { color: colors.icon }]}>
+                Showcase your restaurant and food to customers.
+              </Text>
+              {/* Placeholder for photo upload and display */}
+              <View style={styles.photoUploadPlaceholder}>
+                <IconSymbol name="photo.on.rectangle.angled" size={40} color={colors.icon} />
+                <Text style={[styles.photoUploadText, { color: colors.icon }]}>Tap to add photos</Text>
+              </View>
+            </View>
+
+            {/* Reviews and Ratings Placeholder */}
+            <View style={[styles.formSection, { backgroundColor: colors.card }]}>
+              <Text style={[styles.formSectionTitle, { color: colors.text }]}>Customer Reviews & Ratings</Text>
+              {/* Placeholder for reviews and ratings list */}
+              <Text style={[styles.formSectionSubtitle, { color: colors.icon }]}>Display list of customer reviews here.</Text>
             </View>
           </ScrollView>
         </View>

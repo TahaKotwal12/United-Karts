@@ -85,7 +85,7 @@ export default function RestaurantOrdersScreen() {
       discountAmount: 0,
       totalAmount: 2202.00, // ₹29.36 * 75
       status: 'pending',
-      paymentMethod: 'upi',
+ paymentMethod: 'card',
       paymentStatus: 'paid',
       createdAt: '2 min ago',
       estimatedDeliveryTime: '25-30 min',
@@ -120,7 +120,7 @@ export default function RestaurantOrdersScreen() {
       discountAmount: 150.00, // ₹2.00 * 75
       totalAmount: 1887.75, // ₹25.17 * 75
       status: 'preparing',
-      paymentMethod: 'upi',
+ paymentMethod: 'cash',
       paymentStatus: 'paid',
       createdAt: '5 min ago',
       estimatedDeliveryTime: '20-25 min',
@@ -149,7 +149,7 @@ export default function RestaurantOrdersScreen() {
       discountAmount: 0,
       totalAmount: 1626.00, // ₹21.68 * 75
       status: 'ready_for_pickup',
-      paymentMethod: 'cash',
+ paymentMethod: 'upi',
       paymentStatus: 'pending',
       createdAt: '8 min ago',
       estimatedDeliveryTime: '15-20 min',
@@ -157,6 +157,82 @@ export default function RestaurantOrdersScreen() {
       deliveryPartnerName: 'Ravi Kumar',
     },
   ]);
+
+  useEffect(() => {
+    // Sort orders by creation time (newest first)
+    setOrders(prevOrders => 
+      [...prevOrders].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+    );
+  }, [orders]); // Dependency on orders to resort when orders change
+
+  // Dummy data for more orders to make the list scrollable
+  const moreDummyOrders: Order[] = [
+    {
+      id: '4',
+      orderNumber: 'UK004',
+      customerName: 'Neha Singh',
+      customerPhone: '+91 99887 76655',
+      items: [
+        { id: '6', foodItemName: 'Paneer Tikka Masala', quantity: 1, unitPrice: 450, totalPrice: 450, specialInstructions: 'Medium spicy' },
+        { id: '7', foodItemName: 'Butter Naan', quantity: 2, unitPrice: 60, totalPrice: 120 },
+      ],
+      subtotal: 570,
+      taxAmount: 57,
+      deliveryFee: 50,
+      discountAmount: 20,
+      totalAmount: 657,
+      status: 'completed',
+      paymentMethod: 'wallet',
+      paymentStatus: 'paid',
+      createdAt: '30 min ago',
+      deliveryAddress: 'D-10, Vasant Kunj, New Delhi 110070',
+      deliveryPartnerName: 'Deepak Kumar',
+    },
+    {
+      id: '5',
+      orderNumber: 'UK005',
+      customerName: 'Rahul Gupta',
+      customerPhone: '+91 97654 32100',
+      items: [
+        { id: '8', foodItemName: 'Chicken Biryani', quantity: 1, unitPrice: 380, totalPrice: 380 },
+        { id: '9', foodItemName: 'Raita', quantity: 1, unitPrice: 50, totalPrice: 50 },
+      ],
+      subtotal: 430,
+      taxAmount: 43,
+      deliveryFee: 50,
+      discountAmount: 0,
+      totalAmount: 523,
+      status: 'completed',
+      paymentMethod: 'upi',
+      paymentStatus: 'paid',
+      createdAt: '1 hour ago',
+      deliveryAddress: 'E-50, Cyber City, Gurgaon, Haryana 122002',
+    },
+    {
+      id: '6',
+      orderNumber: 'UK006',
+      customerName: 'Anjali Desai',
+      customerPhone: '+91 90000 12345',
+      items: [
+        { id: '10', foodItemName: 'Masala Dosa', quantity: 2, unitPrice: 90, totalPrice: 180 },
+      ],
+      subtotal: 180,
+      taxAmount: 18,
+      deliveryFee: 40,
+      discountAmount: 0,
+      totalAmount: 238,
+      status: 'cancelled', // Example of a cancelled order
+      paymentMethod: 'card',
+      paymentStatus: 'refunded',
+      createdAt: '2 hours ago',
+      deliveryAddress: 'F-20, Koramangala, Bangalore, Karnataka 560034',
+    },
+  ];
+
+  // Append more dummy orders to the initial state
+  useEffect(() => {
+    setOrders(prevOrders => [...prevOrders, ...moreDummyOrders]);
+  }, []); // Run only once on component mount to add more dummy data
 
   const filterOptions = [
     { key: 'all', label: 'All Orders', count: orders.length },

@@ -7,11 +7,14 @@ import {
   TouchableOpacity,
   SafeAreaView,
   Alert,
-  RefreshControl,
 } from 'react-native';
 import { router } from 'expo-router';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
+import { ThemedView } from '@/components/ThemedView';
+import { ThemedText } from '@/components/ThemedText';
+import { IconSymbol } from '@/components/ui/IconSymbol';
+import { RefreshControl } from 'react-native-gesture-handler';
 import { IconSymbol } from '@/components/ui/IconSymbol';
 
 interface RestaurantStats {
@@ -187,10 +190,10 @@ export default function RestaurantDashboardScreen() {
   };
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
+    <ThemedView style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <View>
+ <ThemedView>
           <Text style={[styles.title, { color: colors.text }]}>Dashboard</Text>
           <Text style={[styles.subtitle, { color: colors.icon }]}>Pizza Palace</Text>
         </View>
@@ -205,7 +208,7 @@ export default function RestaurantDashboardScreen() {
           <Text style={styles.statusText}>
             {isOnline ? 'ONLINE' : 'OFFLINE'}
           </Text>
-        </TouchableOpacity>
+ </TouchableOpacity>
       </View>
 
       <ScrollView 
@@ -216,8 +219,8 @@ export default function RestaurantDashboardScreen() {
         }
       >
         {/* Today's Stats */}
-        <View style={[styles.section, { backgroundColor: colors.card, shadowColor: colors.shadow }]}>
-          <Text style={[styles.sectionTitle, { color: colors.text }]}>Today's Performance</Text>
+ <ThemedView style={styles.section}>
+ <ThemedText type="subtitle">Today's Performance</ThemedText>
           
           <View style={styles.statsGrid}>
             <View style={styles.statCard}>
@@ -244,11 +247,11 @@ export default function RestaurantDashboardScreen() {
               <Text style={[styles.statLabel, { color: colors.icon }]}>Rating</Text>
             </View>
           </View>
-        </View>
+ </ThemedView>
 
         {/* Order Status Overview */}
-        <View style={[styles.section, { backgroundColor: colors.card, shadowColor: colors.shadow }]}>
-          <Text style={[styles.sectionTitle, { color: colors.text }]}>Order Status</Text>
+ <ThemedView style={styles.section}>
+ <ThemedText type="subtitle">Order Status</ThemedText>
           
           <View style={styles.orderStatusGrid}>
             <View style={[styles.statusCard, { backgroundColor: colors.warning + '20' }]}>
@@ -266,12 +269,12 @@ export default function RestaurantDashboardScreen() {
               <Text style={[styles.statusLabel, { color: colors.text }]}>Ready</Text>
             </View>
           </View>
-        </View>
+ </ThemedView>
 
         {/* Recent Orders */}
-        <View style={[styles.section, { backgroundColor: colors.card, shadowColor: colors.shadow }]}>
+ <ThemedView style={styles.section}>
           <View style={styles.sectionHeader}>
-            <Text style={[styles.sectionTitle, { color: colors.text }]}>Recent Orders</Text>
+ <ThemedText type="subtitle">Recent Orders</ThemedText>
             <TouchableOpacity onPress={() => router.push('/restaurant/(tabs)/orders')}>
               <Text style={[styles.seeAll, { color: colors.primary }]}>View All</Text>
             </TouchableOpacity>
@@ -330,11 +333,11 @@ export default function RestaurantDashboardScreen() {
               </View>
             </View>
           ))}
-        </View>
+ </ThemedView>
 
         {/* Quick Actions */}
-        <View style={[styles.section, { backgroundColor: colors.card, shadowColor: colors.shadow }]}>
-          <Text style={[styles.sectionTitle, { color: colors.text }]}>Quick Actions</Text>
+ <ThemedView style={styles.section}>
+ <ThemedText type="subtitle">Quick Actions</ThemedText>
           
           <View style={styles.actionsGrid}>
             {quickActions.map((item) => (
@@ -353,12 +356,12 @@ export default function RestaurantDashboardScreen() {
               </TouchableOpacity>
             ))}
           </View>
-        </View>
+ </ThemedView>
 
         {/* Bottom spacing */}
         <View style={styles.bottomSpacing} />
       </ScrollView>
-    </SafeAreaView>
+ </ThemedView>
   );
 }
 

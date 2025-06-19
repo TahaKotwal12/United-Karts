@@ -40,6 +40,8 @@ interface MenuItem {
   totalRatings: number;
   categoryId: string;
   variants?: FoodVariant[];
+  isFeatured?: boolean;
+  tags?: string[];
 }
 
 interface Category {
@@ -83,7 +85,9 @@ export default function RestaurantMenuScreen() {
       rating: 4.5,
       totalRatings: 124,
       categoryId: '1',
+      isFeatured: true,
       variants: [
+
         { id: '1', name: 'Small', priceAdjustment: -225, isDefault: false }, // ₹-3 * 75
         { id: '2', name: 'Medium', priceAdjustment: 0, isDefault: true },
         { id: '3', name: 'Large', priceAdjustment: 300, isDefault: false }, // ₹4 * 75
@@ -104,6 +108,7 @@ export default function RestaurantMenuScreen() {
       rating: 4.7,
       totalRatings: 89,
       categoryId: '1',
+      isFeatured: true,
       variants: [
         { id: '4', name: 'Small', priceAdjustment: -225, isDefault: false },
         { id: '5', name: 'Medium', priceAdjustment: 0, isDefault: true },
@@ -125,6 +130,7 @@ export default function RestaurantMenuScreen() {
       rating: 4.3,
       totalRatings: 67,
       categoryId: '2',
+      tags: ['popular', 'indian bread'],
     },
     {
       id: '4',
@@ -139,6 +145,7 @@ export default function RestaurantMenuScreen() {
       rating: 4.0,
       totalRatings: 45,
       categoryId: '3',
+      tags: ['drink', 'hot beverage'],
     },
     {
       id: '5',
@@ -155,6 +162,7 @@ export default function RestaurantMenuScreen() {
       rating: 4.6,
       totalRatings: 156,
       categoryId: '1',
+      tags: ['main course', 'veg'],
     },
     {
       id: '6',
@@ -171,6 +179,7 @@ export default function RestaurantMenuScreen() {
       rating: 4.4,
       totalRatings: 78,
       categoryId: '4',
+      tags: ['dessert', 'indian sweet'],
     },
   ]);
 
@@ -287,6 +296,11 @@ export default function RestaurantMenuScreen() {
   const MenuItemCard = ({ item }: { item: MenuItem }) => (
     <View style={[styles.menuItemCard, { backgroundColor: colors.card, shadowColor: colors.shadow }]}>
       <Image source={{ uri: item.image }} style={styles.itemImage} />
+      
+      {item.isFeatured && (
+        <View style={[styles.featuredBadge, { backgroundColor: colors.primary }]}>
+          <Text style={styles.featuredBadgeText}>Featured</Text>
+        </View>)}
       
       <View style={styles.itemContent}>
         <View style={styles.itemHeader}>
@@ -653,6 +667,24 @@ export default function RestaurantMenuScreen() {
                 </View>
               </View>
 
+              <View style={styles.formField}>
+                <Text style={[styles.fieldLabel, { color: colors.text }]}>Tags (comma separated)</Text>
+                <TextInput
+                  style={[styles.textInput, { backgroundColor: colors.secondary, color: colors.text }]}
+                  placeholder="e.g., spicy, popular, new"
+                  placeholderTextColor={colors.icon}
+                  value={newItem.tags?.join(', ')}
+                  onChangeText={(text) => setNewItem(prev => ({ ...prev, tags: text.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0) }))}
+                />
+              </View>
+
+              <View style={styles.switchField}>
+                <Text style={[styles.fieldLabel, { color: colors.text }]}>Mark as Featured</Text>
+                <Switch
+                  value={newItem.isFeatured || false}
+                  onValueChange={(value) => setNewItem(prev => ({ ...prev, isFeatured: value }))}
+                />
+              </View>
               <View style={styles.switchField}>
                 <Text style={[styles.fieldLabel, { color: colors.text }]}>Vegetarian</Text>
                 <Switch
@@ -970,4 +1002,13 @@ const styles = StyleSheet.create({
     fontSize: 10,
     fontWeight: 'bold',
   },
+  featuredBadge: {
+    position: 'absolute',
+    top: 10,
+    left: 10,
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 6,
+  },
+  featuredBadgeText: { color: 'white', fontSize: 10, fontWeight: 'bold' },
 });

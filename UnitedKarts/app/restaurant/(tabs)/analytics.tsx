@@ -39,17 +39,17 @@ interface AnalyticsData {
   }>;
 }
 
-export default function RestaurantAnalyticsScreen() {
+export default function RestaurantAnalyticsScreen() {  
   const colorScheme = useColorScheme();
   const colors = Colors[colorScheme ?? 'light'];
   const [selectedPeriod, setSelectedPeriod] = useState<'today' | 'week' | 'month' | 'year'>('today');
 
   const analyticsData: Record<string, AnalyticsData> = {
     today: {
-      period: 'today',
-      revenue: 36412.50, // ₹485.50 * 75
+      period: 'today', 
+      revenue: 36412.50, // Using INR conversion factor ~75 for demonstration
       orders: 24,
-      avgOrderValue: 1517.25, // ₹20.23 * 75
+      avgOrderValue: 1517.25, // Using INR conversion factor ~75 for demonstration 
       customers: 22,
       rating: 4.6,
       totalRatings: 18,
@@ -60,14 +60,14 @@ export default function RestaurantAnalyticsScreen() {
         { name: 'Masala Chai', orders: 15, revenue: 3363.75 }, // ₹44.85 * 75
       ],
       hourlyData: [
-        { hour: '9AM', orders: 2, revenue: 2662.50 }, // ₹35.50 * 75
-        { hour: '10AM', orders: 1, revenue: 1424.25 }, // ₹18.99 * 75
-        { hour: '11AM', orders: 3, revenue: 5058.75 }, // ₹67.45 * 75
-        { hour: '12PM', orders: 5, revenue: 7406.25 }, // ₹98.75 * 75
-        { hour: '1PM', orders: 4, revenue: 6690.00 }, // ₹89.20 * 75
-        { hour: '2PM', orders: 3, revenue: 4222.50 }, // ₹56.30 * 75
-        { hour: '3PM', orders: 2, revenue: 3135.00 }, // ₹41.80 * 75
-        { hour: '4PM', orders: 4, revenue: 5813.25 }, // ₹77.51 * 75
+        { hour: '9AM', orders: 2, revenue: 2662.50 },
+        { hour: '10AM', orders: 1, revenue: 1424.25 },
+        { hour: '11AM', orders: 3, revenue: 5058.75 },
+        { hour: '12PM', orders: 5, revenue: 7406.25 },
+        { hour: '1PM', orders: 4, revenue: 6690.00 },
+        { hour: '2PM', orders: 3, revenue: 4222.50 },
+        { hour: '3PM', orders: 2, revenue: 3135.00 },
+        { hour: '4PM', orders: 4, revenue: 5813.25 },
       ],
       weeklyData: [],
     },
@@ -92,13 +92,13 @@ export default function RestaurantAnalyticsScreen() {
         { day: 'Wed', orders: 25, revenue: 39281.25 }, // ₹523.75 * 75
         { day: 'Thu', orders: 28, revenue: 44865.00 }, // ₹598.20 * 75
         { day: 'Fri', orders: 32, revenue: 51720.00 }, // ₹689.60 * 75
-        { day: 'Sat', orders: 19, revenue: 29887.50 }, // ₹398.50 * 75
-        { day: 'Sun', orders: 12, revenue: 13387.50 }, // ₹178.50 * 75
+        { day: 'Sat', orders: 19, revenue: 29887.50 },
+        { day: 'Sun', orders: 12, revenue: 13387.50 },
       ],
     },
     month: {
       period: 'month',
-      revenue: 1092540.00, // ₹14567.20 * 75
+      revenue: 1092540.00,
       orders: 687,
       avgOrderValue: 1590.75, // ₹21.21 * 75
       customers: 523,
@@ -106,9 +106,9 @@ export default function RestaurantAnalyticsScreen() {
       totalRatings: 342,
       topItems: [
         { name: 'Margherita Pizza', orders: 198, revenue: 237601.50 }, // ₹3168.02 * 75
-        { name: 'Chicken Tikka Pizza', orders: 167, revenue: 237849.75 }, // ₹3171.33 * 75
-        { name: 'Garlic Naan', orders: 289, revenue: 151508.25 }, // ₹2020.11 * 75
-        { name: 'Paneer Butter Masala', orders: 134, revenue: 170749.50 }, // ₹2276.66 * 75
+        { name: 'Chicken Tikka Pizza', orders: 167, revenue: 237849.75 },
+        { name: 'Garlic Naan', orders: 289, revenue: 151508.25 },
+        { name: 'Paneer Butter Masala', orders: 134, revenue: 170749.50 },
       ],
       hourlyData: [],
       weeklyData: [],
@@ -116,16 +116,16 @@ export default function RestaurantAnalyticsScreen() {
     year: {
       period: 'year',
       revenue: 12591783.75, // ₹167890.45 * 75
-      orders: 7834,
+      orders: 7834, 
       avgOrderValue: 1607.25, // ₹21.43 * 75
       customers: 4567,
       rating: 4.3,
       totalRatings: 2890,
       topItems: [
-        { name: 'Margherita Pizza', orders: 2145, revenue: 2573366.25 }, // ₹34311.55 * 75
-        { name: 'Chicken Tikka Pizza', orders: 1876, revenue: 2671218.00 }, // ₹35616.24 * 75
-        { name: 'Garlic Naan', orders: 3234, revenue: 1695424.50 }, // ₹22605.66 * 75
-        { name: 'Paneer Butter Masala', orders: 1567, revenue: 1997874.75 }, // ₹26638.33 * 75
+        { name: 'Margherita Pizza', orders: 2145, revenue: 2573366.25 },
+        { name: 'Chicken Tikka Pizza', orders: 1876, revenue: 2671218.00 },
+        { name: 'Garlic Naan', orders: 3234, revenue: 1695424.50 },
+        { name: 'Paneer Butter Masala', orders: 1567, revenue: 1997874.75 },
       ],
       hourlyData: [],
       weeklyData: [],
