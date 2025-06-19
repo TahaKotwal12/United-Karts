@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "UnitedKarts",
-    "slug": "UnitedKarts",
+    "slug": "united-karts",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -37,6 +37,13 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "959eb531-aab6-464d-a34a-af0b13f293e9"
+      }
+    },
+    "owner": "tahakotwal"
   }
 }
