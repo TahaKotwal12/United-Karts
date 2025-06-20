@@ -1,0 +1,6 @@
+# uv config for delivery_partner service
+uvicorn:
+  app: app.main:app
+  host: 0.0.0.0
+  port: 8003
+  reload: true 
