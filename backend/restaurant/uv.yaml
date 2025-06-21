@@ -9,3 +9,4 @@ processes:
     command: uvicorn app.main:app --host 0.0.0.0 --port 8001 --reload
   - name: batch
     command: python -m batch.batch_jobs 
+    
