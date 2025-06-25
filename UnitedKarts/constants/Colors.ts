@@ -1,26 +1,49 @@
 /**
- * Below are the colors that are used in the app. The colors are defined in the light and dark mode.
- * There are many other ways to style your app. For example, [Nativewind](https://www.nativewind.dev/), [Tamagui](https://tamagui.dev/), [unistyles](https://reactnativeunistyles.vercel.app), etc.
+ * UnitedKarts Food Delivery App Colors
+ * Primary brand color: #5e60ce
  */
 
-const tintColorLight = '#0a7ea4';
-const tintColorDark = '#fff';
+const primaryColor = '#5e60ce';
+const primaryColorLight = '#7b7dd9';
+const primaryColorDark = '#4a4ca3';
 
 export const Colors = {
   light: {
-    text: '#11181C',
-    background: '#fff',
-    tint: tintColorLight,
-    icon: '#687076',
-    tabIconDefault: '#687076',
-    tabIconSelected: tintColorLight,
+    text: '#1a1a1a',
+    background: '#ffffff',
+    tint: primaryColor,
+    icon: '#666666',
+    tabIconDefault: '#999999',
+    tabIconSelected: primaryColor,
+    primary: primaryColor,
+    primaryLight: primaryColorLight,
+    primaryDark: primaryColorDark,
+    secondary: '#f8f9fa',
+    accent: '#ff6b6b',
+    success: '#51cf66',
+    warning: '#ffd43b',
+    error: '#ff6b6b',
+    border: '#e9ecef',
+    card: '#ffffff',
+    shadow: 'rgba(0, 0, 0, 0.1)',
   },
   dark: {
-    text: '#ECEDEE',
-    background: '#151718',
-    tint: tintColorDark,
-    icon: '#9BA1A6',
-    tabIconDefault: '#9BA1A6',
-    tabIconSelected: tintColorDark,
+    text: '#ffffff',
+    background: '#121212',
+    tint: primaryColorLight,
+    icon: '#cccccc',
+    tabIconDefault: '#888888',
+    tabIconSelected: primaryColorLight,
+    primary: primaryColorLight,
+    primaryLight: '#9b9deb',
+    primaryDark: primaryColor,
+    secondary: '#1e1e1e',
+    accent: '#ff7979',
+    success: '#6bcf7f',
+    warning: '#fdcb6e',
+    error: '#ff7979',
+    border: '#333333',
+    card: '#1e1e1e',
+    shadow: 'rgba(0, 0, 0, 0.3)',
   },
 };
