@@ -9,6 +9,7 @@ import {
   Alert,
   KeyboardAvoidingView,
   Platform,
+  Pressable,
   ScrollView,
 } from 'react-native';
 import { router } from 'expo-router';
@@ -42,6 +43,15 @@ export default function RestaurantOnboardingScreen() {
   const [avgDeliveryTime, setAvgDeliveryTime] = useState('');
   const [openingTime, setOpeningTime] = useState('');
   const [closingTime, setClosingTime] = useState('');
+
+  // Indian Business Details
+  const [fssaiLicense, setFssaiLicense] = useState('');
+  const [gstin, setGstin] = useState('');
+  const [bankAccountNumber, setBankAccountNumber] = useState('');
+  const [ifscCode, setIfscCode] = useState('');
+
+  // Document Uploads
+  const [restaurantPhotos, setRestaurantPhotos] = useState<string[]>([]); // To store image URIs
 
   const totalSteps = 3;
 
@@ -101,6 +111,127 @@ export default function RestaurantOnboardingScreen() {
         );
     }, 2000);
   };
+
+  const handleDocumentUpload = async (documentType: string) => {
+    // Placeholder for document upload logic
+    // This should ideally open a file picker or camera
+    Alert.alert('Upload Document', `Simulating upload for ${documentType}`);
+    // In a real app, you would use libraries like expo-document-picker or expo-image-picker
+  };
+
+  const handlePhotoUpload = async () => {
+    // Placeholder for photo upload logic
+    // This should ideally open an image picker or camera
+    Alert.alert('Upload Photo', 'Simulating photo upload');
+    // In a real app, you would use libraries like expo-image-picker
+    // After successful upload, add the image URI to restaurantPhotos state
+    // Example: setRestaurantPhotos([...restaurantPhotos, uploadedImageUri]);
+  };
+
+  const renderDocumentUpload = (label: string, fileType: string) => (
+    <View style={styles.inputContainer}>
+      <Text style={[styles.label, { color: colors.text }]}>{label} *</Text>
+      <Pressable
+        style={[styles.uploadButton, { backgroundColor: colors.secondary, borderColor: colors.border }]}
+        onPress={() => handleDocumentUpload(label)}
+      >
+        <IconSymbol name="doc.fill" size={20} color={colors.icon} />
+        <Text style={[styles.uploadButtonText, { color: colors.text }]}>Upload {fileType}</Text>
+      </Pressable>
+      {/* Add preview/status indicator here */}
+    </View>
+  );
+
+  const renderPhotoUpload = () => (
+    <View style={styles.inputContainer}>
+      <Text style={[styles.label, { color: colors.text }]}>Restaurant Photos *</Text>
+      <View style={styles.photoUploadContainer}>
+        {restaurantPhotos.map((photoUri, index) => (
+          <View key={index} style={styles.photoPreview}>
+            {/* Replace with actual Image component in a real app */}
+            <View style={[styles.photoPlaceholder, { backgroundColor: colors.border }]}>
+              <Text style={{ color: colors.icon }}>Photo {index + 1}</Text>
+            </View>
+            {/* Add option to remove photo */}
+          </View>
+        ))}
+        <Pressable
+          style={[styles.addPhotoButton, { backgroundColor: colors.secondary, borderColor: colors.border }]}
+          onPress={handlePhotoUpload}
+        >
+          <IconSymbol name="camera.fill" size={30} color={colors.icon} />
+        </Pressable>
+      </View>
+      {/* Add guidelines for photos */}
+      <Text style={[styles.guidelinesText, { color: colors.icon }]}>
+        Upload at least 3-5 high-quality photos of your restaurant and signature dishes.
+      </Text>
+    </View>
+  );
+
+  const renderStep4 = () => (
+    <View style={[styles.formContainer, { backgroundColor: colors.card, shadowColor: colors.shadow }]}>
+      <Text style={[styles.stepTitle, { color: colors.text }]}>Indian Business Details & Documents</Text>
+      <Text style={[styles.stepDescription, { color: colors.icon }]}>
+        Provide necessary business and bank details for verification and payouts.
+      </Text>
+
+      {renderDocumentUpload('FSSAI License', 'FSSAI License (PDF or Image)')}
+      {renderDocumentUpload('GST Certificate', 'GST Certificate (PDF or Image)')}
+      {renderDocumentUpload('PAN Card', 'PAN Card (Image)')}
+
+      <View style={styles.inputContainer}>
+        <Text style={[styles.label, { color: colors.text }]}>GSTIN (Optional)</Text>
+        <View style={[styles.inputWrapper, { backgroundColor: colors.secondary, borderColor: colors.border }]}>
+          <TextInput
+            style={[styles.input, { color: colors.text }]}
+            placeholder="Enter GSTIN"
+            placeholderTextColor={colors.icon}
+            value={gstin}
+            onChangeText={setGstin}
+            autoCapitalize="characters"
+          />
+        </View>
+      </View>
+
+      <View style={styles.inputContainer}>
+        <Text style={[styles.label, { color: colors.text }]}>Bank Account Number *</Text>
+        <View style={[styles.inputWrapper, { backgroundColor: colors.secondary, borderColor: colors.border }]}>
+          <IconSymbol name="creditcard.fill" size={20} color={colors.icon} />
+          <TextInput
+            style={[styles.input, { color: colors.text }]}
+            placeholder="Enter bank account number"
+            placeholderTextColor={colors.icon}
+            value={bankAccountNumber}
+            onChangeText={setBankAccountNumber}
+            keyboardType="numeric"
+          />
+        </View>
+      </View>
+
+      <View style={styles.inputContainer}>
+        <Text style={[styles.label, { color: colors.text }]}>IFSC Code *</Text>
+        <View style={[styles.inputWrapper, { backgroundColor: colors.secondary, borderColor: colors.border }]}>
+          <IconSymbol name="building.columns.fill" size={20} color={colors.icon} />
+          <TextInput
+            style={[styles.input, { color: colors.text }]}
+            placeholder="Enter IFSC code"
+            placeholderTextColor={colors.icon}
+            value={ifscCode}
+            onChangeText={setIfscCode}
+            autoCapitalize="characters"
+          />
+        </View>
+      </View>
+
+      {renderPhotoUpload()}
+
+    </View>
+  );
+
+  // Update totalSteps to include the new step
+  const totalSteps = 4;
+
 
   const renderStepIndicator = () => (
     <View style={styles.stepIndicator}>
@@ -325,7 +456,7 @@ export default function RestaurantOnboardingScreen() {
           <Text style={[styles.label, { color: colors.text }]}>Min Order Amount *</Text>
           <View style={[styles.inputWrapper, { backgroundColor: colors.secondary, borderColor: colors.border }]}>
             <Text style={[styles.currencySymbol, { color: colors.icon }]}>$</Text>
-            <TextInput
+            <TextInput // TODO: Change currency symbol to ₹ or use a dynamic approach based on region
               style={[styles.input, { color: colors.text }]}
               placeholder="0.00"
               placeholderTextColor={colors.icon}
@@ -340,7 +471,7 @@ export default function RestaurantOnboardingScreen() {
           <Text style={[styles.label, { color: colors.text }]}>Delivery Fee *</Text>
           <View style={[styles.inputWrapper, { backgroundColor: colors.secondary, borderColor: colors.border }]}>
             <Text style={[styles.currencySymbol, { color: colors.icon }]}>$</Text>
-            <TextInput
+            <TextInput // TODO: Change currency symbol to ₹
               style={[styles.input, { color: colors.text }]}
               placeholder="0.00"
               placeholderTextColor={colors.icon}
@@ -422,6 +553,7 @@ export default function RestaurantOnboardingScreen() {
           {currentStep === 1 && renderStep1()}
           {currentStep === 2 && renderStep2()}
           {currentStep === 3 && renderStep3()}
+          {currentStep === 4 && renderStep4()}
 
           {/* Navigation Buttons */}
           <View style={styles.buttonContainer}>
@@ -572,6 +704,40 @@ const styles = StyleSheet.create({
   cuisineChipText: {
     fontSize: 14,
     fontWeight: '600',
+  },
+  uploadButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 12,
+    borderWidth: 1,
+    paddingHorizontal: 16,
+    paddingVertical: 16,
+  },
+  uploadButtonText: {
+    fontSize: 16,
+    fontWeight: '600',
+    marginLeft: 12,
+  },
+  photoUploadContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 12,
+  },
+  photoPreview: {
+    width: 80,
+    height: 80,
+    borderRadius: 12,
+    overflow: 'hidden',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  photoPlaceholder: { width: '100%', height: '100%', justifyContent: 'center', alignItems: 'center' }, // Placeholder style
+  addPhotoButton: { width: 80, height: 80, borderRadius: 12, borderWidth: 1, borderStyle: 'dashed', justifyContent: 'center', alignItems: 'center' },
+  guidelinesText: {
+    fontSize: 14,
+    marginTop: 8,
+    fontStyle: 'italic',
   },
   buttonContainer: {
     paddingBottom: 40,
